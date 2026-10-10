@@ -35,3 +35,22 @@
 
 * **Upcoming Team AI Skills**
   * [🤖 AI Skills & Guardrails](ai-skills/README.md)
+  * **Always-on Rules**
+    * [01. Architectural Invariants](ai-skills/rules/01-architectural-invariants.md)
+    * [02. Flutter Compatibility](ai-skills/rules/02-flutter-compatibility.md)
+    * [03. Dual-Channel Storefront](ai-skills/rules/03-dual-channel-storefront.md)
+    * [04. Kafka & Messaging](ai-skills/rules/04-kafka-and-messaging.md)
+  * **On-demand Agent Skills**
+    * [Governance Skill](ai-skills/skills/fattakse-governance/SKILL.md)
+      * [Architecture Invariants Reference](ai-skills/skills/fattakse-governance/references/architectural_invariants.md)
+    * [Contract Verifier Skill](ai-skills/skills/fattakse-contract-verifier/SKILL.md)
+      * [Flutter Response Envelopes](ai-skills/skills/fattakse-contract-verifier/references/flutter_response_envelopes.md)
+      * [Verification Script ↗](https://github.com/townsfattakapp/specialDocs/blob/main/ai-skills/skills/fattakse-contract-verifier/scripts/verify-contract.sh)
+    * [Kafka Streaming Skill](ai-skills/skills/fattakse-kafka-streaming/SKILL.md)
+      * [Topic Event Schemas](ai-skills/skills/fattakse-kafka-streaming/references/topic_event_schemas.md)
+      * [Kafka Health Script ↗](https://github.com/townsfattakapp/specialDocs/blob/main/ai-skills/skills/fattakse-kafka-streaming/scripts/check-kafka-health.sh)
+    * [ETL Pipeline Skill](ai-skills/skills/fattakse-etl-pipeline/SKILL.md)
+      * [ETL Invariant Checks](ai-skills/skills/fattakse-etl-pipeline/references/invariant_checks.md)
+      * [ETL Invariants Script ↗](https://github.com/townsfattakapp/specialDocs/blob/main/ai-skills/skills/fattakse-etl-pipeline/scripts/run-etl-invariants.sh)
+    * [Prompt Executor Skill](ai-skills/skills/fattakse-prompt-executor/SKILL.md)
+      * [Task Execution Checklist](ai-skills/skills/fattakse-prompt-executor/references/task_execution_checklist.md)
