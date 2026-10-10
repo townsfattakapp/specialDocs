@@ -53,6 +53,51 @@ We have explicitly rejected the incremental Strangler Fig migration and the modu
 
 The target backend consists of **8 independently deployable microservices** fronted by a high-performance **API Gateway / Edge Router**:
 
+```mermaid
+flowchart TB
+  subgraph CLIENT["Client application tier"]
+    MOBILE["Flutter mobile suite (frozen)<br/>Customer • Vendor • Rider<br/>Tobacco-free"]
+    WEB["React 19 user-web PWA<br/>Full catalog + age-gated Paan Corner"]
+    OPS["Internal operations<br/>admin-react • vendor-react"]
+  end
+
+  GATEWAY["API Gateway / Edge Router<br/>Fastify ingress • TLS • routing • rate limits<br/>Flutter contract facade • regulated-category firewall"]
+
+  subgraph SERVICES["Independently deployable microservices"]
+    IAM["1. Identity & Access<br/>OTP • Passport JWT • RBAC<br/><i>fattakse_iam</i>"]
+    STORE["2. Store & Merchant<br/>Profiles • zones • KYC<br/><i>fattakse_store</i>"]
+    CATALOG["3. Catalog & Search<br/>Items • variants • Typesense<br/><i>fattakse_catalog</i>"]
+    INVENTORY["4. Inventory<br/>Multi-owner ledger • atomic locks<br/><i>fattakse_inventory</i>"]
+    ORDER["5. Order & Checkout<br/>Cart • GST • order state<br/><i>fattakse_order</i>"]
+    FLEET["6. Fleet & Delivery<br/>Dispatch • GPS • 18+ check<br/><i>fattakse_fleet</i>"]
+    FINANCE["7. Payments & Finance<br/>Razorpay • COD • settlements<br/><i>fattakse_finance</i>"]
+    NOTIFY["8. Notify & Communications<br/>FCM • SMS OTP • in-app chat<br/><i>fattakse_notify</i>"]
+  end
+
+  EVENTS["Hybrid event streaming and task queue tier<br/>Kafka / Redpanda: replayable domain events + transactional outbox<br/>Redis BullMQ: delayed timers, expiry, retries"]
+  LOG["Distributed event log<br/>fattakse.* Kafka topics"]
+
+  MOBILE -->|HTTPS REST / WebSockets| GATEWAY
+  WEB -->|HTTPS| GATEWAY
+  OPS -->|HTTPS| GATEWAY
+  GATEWAY --> IAM & STORE & CATALOG & INVENTORY & ORDER
+  ORDER --> FLEET & FINANCE & NOTIFY
+  IAM & STORE & CATALOG & INVENTORY & ORDER & FLEET & FINANCE & NOTIFY --> EVENTS
+  EVENTS --> LOG
+
+  classDef client fill:#fff7ed,stroke:#f97316,color:#431407
+  classDef gateway fill:#ffedd5,stroke:#ea580c,color:#431407
+  classDef service fill:#eff6ff,stroke:#2563eb,color:#172554
+  classDef event fill:#f0fdf4,stroke:#16a34a,color:#14532d
+  class MOBILE,WEB,OPS client
+  class GATEWAY gateway
+  class IAM,STORE,CATALOG,INVENTORY,ORDER,FLEET,FINANCE,NOTIFY service
+  class EVENTS,LOG event
+```
+
+<details>
+<summary>View the original text-only topology</summary>
+
 ```
                                   +--------------------------------------------------------------+
                                   |                      CLIENT APPLICATION TIER                 |
@@ -138,6 +183,8 @@ The target backend consists of **8 independently deployable microservices** fron
                                          |  & Transactional Outbox) |
                                          +--------------------------+
 ```
+
+</details>
 
 ---
 
