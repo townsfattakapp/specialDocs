@@ -31,6 +31,17 @@
 
 ## 2. Five-Month Detailed Implementation Schedule
 
+```mermaid
+flowchart LR
+  M1["Month 1<br/>Discovery • architecture • contracts • scaffolding"] --> M2["Month 2<br/>IAM • store • catalog • search • pricing"]
+  M2 --> M3["Month 3<br/>Orders • inventory • fleet • finance • SPAs"]
+  M3 --> M4["Month 4<br/>Integration • contract diffing • rehearsals"]
+  M4 --> M5["Month 5<br/>Provisioning • final rehearsal • cutover • stabilization"]
+```
+
+<details>
+<summary>View the original text-only roadmap</summary>
+
 ```
 +---------------------------------------------------------------------------------------------------+
 |                               FIVE-MONTH DETAILED ROADMAP                                         |
@@ -42,6 +53,8 @@
 |  MONTH 5 : Production Cluster Provisioning, Final Rehearsal, Scheduled Cutover, Stabilization     |
 +---------------------------------------------------------------------------------------------------+
 ```
+
+</details>
 
 ### Month 1: Discovery, Architecture, Toolchain & Scaffolding (Weeks 1–4)
 - **Week 1: Architecture Sign-Off, Toolchain & Monorepo Scaffolding**

@@ -149,6 +149,22 @@
 
 ### Minute-by-Minute Operational Execution Runbook
 
+```mermaid
+timeline
+  01:45 AM : Pod assembles and verifies Laravel health
+  02:00 AM : Enable Laravel read-only maintenance mode
+  02:02 AM : Stop Laravel queue workers
+  02:04 AM : Start final delta ETL migration
+  02:08 AM : Delta migration completes
+  02:10 AM : Assert record and ledger invariants
+  02:12 AM : Switch ingress / DNS to microservices gateway
+  02:13 AM : Run end-to-end production smoke test
+  02:15 AM : Lift maintenance mode and declare production live
+```
+
+<details>
+<summary>View the original text-only timeline</summary>
+
 ```
 +----------------------------------------------------------------------------------------------------+
 |                         CUTOVER NIGHT TIMELINE (02:00 AM - 02:15 AM IST)                           |
@@ -164,6 +180,8 @@
 |  02:15 AM : Maintenance Mode Lifted; Production Declared LIVE on Node.js Microservices Platform!   |
 +----------------------------------------------------------------------------------------------------+
 ```
+
+</details>
 
 ### Detailed Tasks by Role
 

@@ -146,6 +146,20 @@ Certification requires mathematical proof down to the exact paisa (0.00 INR tole
 
 ## 6. Cutover Night Final Go/No-Go Decision Tree
 
+```mermaid
+flowchart TB
+  START["02:00 AM maintenance start"] --> ETL["Final delta ETL migration"] --> FINANCE["Financial invariant script"]
+  FINANCE --> CHECK1{"Variance = ₹0.00?"}
+  CHECK1 -->|No| ABORT["Abort cutover<br/>rollback in under 60 seconds"]
+  CHECK1 -->|Yes| SWITCH["Gateway DNS and ingress switch"] --> SMOKE["Production smoke-test order"]
+  SMOKE --> CHECK2{"Live order succeeds in under 90 seconds?"}
+  CHECK2 -->|No| ROLLBACK["Emergency rollback<br/>reverse-delta ETL sync"]
+  CHECK2 -->|Yes| CERTIFIED["CERTIFIED<br/>release public traffic at 02:15 AM"]
+```
+
+<details>
+<summary>View the original text-only decision tree</summary>
+
 ```
                       [02:00 AM IST Maintenance Start]
                                       │
@@ -170,3 +184,5 @@ Certification requires mathematical proof down to the exact paisa (0.00 INR tole
                =======================================
                [Release Public Traffic - 02:15 AM IST]
 ```
+
+</details>
