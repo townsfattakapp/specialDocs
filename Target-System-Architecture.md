@@ -14,6 +14,24 @@
 
 We have explicitly rejected the incremental Strangler Fig migration and the modular monolith topology in favor of a **Parallel Greenfield Microservices Architecture**:
 
+```mermaid
+flowchart TB
+  CURRENT["Current production — untouched<br/>PHP 8.2 / Laravel 12 continues serving live customers<br/>Hostinger VPS remains operational • no development writes<br/>Reference implementation for business rules and contracts"]
+  STAGING["Parallel development and staging — isolated<br/>8 Node.js / TypeScript microservices + React portals<br/>Month 1: architecture, contracts, schemas, environments<br/>Months 2–3: services, SPAs, API facade, ETL<br/>Month 4: integration, contract diffing, ETL rehearsals<br/>Month 5: final rehearsal, cutover, rollback-ready"]
+  CUTOVER["Final production cutover<br/>15-minute maintenance window → delta ETL sync<br/>Ingress / DNS switch → Laravel decommissioned"]
+  CURRENT -. "production stays live during build" .-> STAGING
+  STAGING -->|Month 5 maintenance window| CUTOVER
+  classDef production fill:#eff6ff,stroke:#2563eb,color:#172554
+  classDef staging fill:#fff7ed,stroke:#ea580c,color:#431407
+  classDef cutover fill:#f0fdf4,stroke:#16a34a,color:#14532d
+  class CURRENT production
+  class STAGING staging
+  class CUTOVER cutover
+```
+
+<details>
+<summary>View the original text-only topology</summary>
+
 ```
 +---------------------------------------------------------------------------------------------------+
 |                                  PARALLEL GREENFIELD TOPOLOGY                                     |
@@ -39,6 +57,8 @@ We have explicitly rejected the incremental Strangler Fig migration and the modu
 |  15-minute maintenance window -> Delta ETL sync -> Ingress/DNS switch -> Laravel decommissioned   |
 +---------------------------------------------------------------------------------------------------+
 ```
+
+</details>
 
 ### 1.2 Core Architectural Principles
 1. **Isolated Environments:** Development and staging clusters are completely decoupled from production. Developers never connect to or modify production databases.
