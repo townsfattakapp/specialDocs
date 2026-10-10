@@ -14,6 +14,20 @@ The legacy Blade server-rendered templates will be replaced by two modern, high-
 1. **`admin-react` (Fattakse Operations & Control Plane):** Central command center for management, financial reconciliation, master catalog, and fleet dispatch.
 2. **`vendor-react` (Merchant & Dark Store Portal):** Clean, fast operational interface for Tirora dark-store pickers and local restaurant kitchens.
 
+```mermaid
+flowchart TB
+  SPA["Modern React 19 SPA tier<br/>Vite • TypeScript • Tailwind • shadcn/ui<br/>TanStack Query • React Hook Form • Zod"]
+  GATEWAY["API Gateway / Edge Router<br/>JWT bearer auth • RBAC • permissions"]
+  ADMIN["admin-service APIs"]
+  VENDOR["vendor and order APIs"]
+  SPA -->|HTTPS REST / WebSockets| GATEWAY
+  GATEWAY --> ADMIN
+  GATEWAY --> VENDOR
+```
+
+<details>
+<summary>View the original text-only topology</summary>
+
 ```
 +---------------------------------------------------------------------------------------+
 |                                MODERN REACT 19 SPA TIER                               |
@@ -36,6 +50,8 @@ The legacy Blade server-rendered templates will be replaced by two modern, high-
     |      admin-service APIs     |                           |    vendor / order APIs      |
     +-----------------------------+                           +-----------------------------+
 ```
+
+</details>
 
 ---
 

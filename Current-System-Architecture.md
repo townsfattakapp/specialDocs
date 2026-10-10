@@ -19,6 +19,27 @@ In the approved parallel development strategy:
 - **Reference Implementation:** Laravel acts as the canonical reference specification for all business rules, tax calculations, and API contracts.
 - **Zero Cross-Environment Contamination:** Development and staging clusters are completely isolated. No development code or experimental database mutations are permitted on this production system.
 
+```mermaid
+flowchart TB
+  CLIENTS["Frozen client tier<br/>Flutter Customer • Vendor • Rider<br/>Next.js storefront"]
+  NGINX["Nginx ingress<br/>TLS • rate limiting • CORS"]
+  LARAVEL["Laravel 12 API monolith<br/>PHP 8.2-FPM • admin"]
+  REVERB["Laravel Reverb<br/>WebSockets :6002"]
+  MYSQL[("MySQL 8.0<br/>264 tables")]
+  REDIS[("Redis 7.2<br/>14 queue tiers • session/cache")]
+  TYPESENSE[("Typesense 28.0<br/>catalog search")]
+  CLIENTS -->|HTTPS / WSS| NGINX
+  NGINX -->|HTTP /api/v1| LARAVEL
+  NGINX -->|WSS /app| REVERB
+  LARAVEL --> MYSQL
+  LARAVEL --> REDIS
+  LARAVEL --> TYPESENSE
+  REDIS -->|broadcast| REVERB
+```
+
+<details>
+<summary>View the original text-only topology</summary>
+
 ```
                               +---------------------------------------+
                               |        Client Tier (FROZEN)           |
@@ -51,6 +72,8 @@ In the approved parallel development strategy:
                  | (264 Tables) | |  Session/Cache| | & Faceted Catalog  |
                  +--------------+ +---------------+ +--------------------+
 ```
+
+</details>
 
 ---
 

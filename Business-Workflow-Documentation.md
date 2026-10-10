@@ -10,6 +10,20 @@
 
 ## 1. Customer Discovery, Cart & Checkout Workflow
 
+```mermaid
+flowchart LR
+  LOGIN["Customer enters app<br/>OTP login"] --> ZONE["Hyperlocal<br/>zone check"]
+  ZONE --> CATALOG["Catalog discovery<br/>Typesense"]
+  CATALOG --> QUOTE["Dynamic quote<br/>GST + fees"]
+  QUOTE --> IDEMPOTENCY["Idempotency check"]
+  IDEMPOTENCY --> PAYMENT["Razorpay or COD"]
+  PAYMENT --> STOCK["Atomic stock reservation"]
+  STOCK --> ORDER["Order created<br/>broadcast to operations"]
+```
+
+<details>
+<summary>View the original text-only workflow</summary>
+
 ```
 +---------------+     +---------------+     +---------------+     +---------------+
 |  Customer     |     |   Hyperlocal  |     | Master Catalog|     | Dynamic Quote |
@@ -24,6 +38,8 @@
 | to Ops        |     |  UPDATE Lock) |     | COD Confirmed |     | (Unique Key)  |
 +---------------+     +---------------+     +---------------+     +---------------+
 ```
+
+</details>
 
 ### 1.1 Customer Authentication
 - **Entry Point:** `POST /api/v1/auth/request-otp`, `POST /api/v1/auth/verify-phone`
@@ -62,6 +78,20 @@
 
 **Crucial Note:** Walk-in retail and physical counter checkout (Hyper POS) are **excluded**. Fulfillment is 100% digital **Pick & Pack**.
 
+```mermaid
+flowchart LR
+  PLACED["Order placed<br/>confirmed"] --> QUEUE["Picker queue<br/>Vendor portal"]
+  QUEUE --> PICK["Pick and barcode<br/>verification"]
+  PICK --> PACK["Bag packing and<br/>tamper seal"]
+  PACK --> READY["Handover to<br/>assigned rider"]
+  READY --> DELIVERY["Out for delivery<br/>live GPS"]
+  DELIVERY --> VERIFY["Doorstep 18+ ID<br/>and delivery OTP"]
+  VERIFY --> COMPLETE["Order complete<br/>stock reconciled"]
+```
+
+<details>
+<summary>View the original text-only workflow</summary>
+
 ```
 +---------------+     +---------------+     +---------------+     +---------------+
 | Order Placed  |     | Picker Screen |     | Item Picking  |     | Bag Packing   |
@@ -78,6 +108,8 @@
 |  'ready')     |     |  Tracking)    |     | Verified      |     |               |
 +---------------+     +---------------+     +---------------+     +---------------+
 ```
+
+</details>
 
 ### 2.1 Multi-Owner Inventory Model (Tirora Dark Store)
 The Tirora dark store manages two distinct categories of physical stock:
@@ -179,6 +211,24 @@ A web app that **only** sells cigarettes and tobacco won't attract enough repeat
 
 ### 6.1 Dual-Channel Architecture
 
+```mermaid
+flowchart TB
+  FLUTTER["Flutter customer app<br/>Grocery • dark store • food<br/>Tobacco blocked"]
+  WEB["React user-web storefront<br/>Full catalog including Paan Corner<br/>COTPA age gate"]
+  FIREWALL["API Gateway regulated-category firewall<br/>Flutter: exclude tobacco categories<br/>Web: serve full catalog"]
+  FLUTTER --> FIREWALL
+  WEB --> FIREWALL
+  classDef restricted fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+  classDef web fill:#f0fdf4,stroke:#16a34a,color:#14532d
+  classDef gateway fill:#fff7ed,stroke:#ea580c,color:#431407
+  class FLUTTER restricted
+  class WEB web
+  class FIREWALL gateway
+```
+
+<details>
+<summary>View the original text-only diagram</summary>
+
 ```
                          FLUTTER CUSTOMER APP                    REACT USER WEB STOREFRONT
                          (townsfattakappin_ios_android_user)      (user-web at fattakse.in)
@@ -197,6 +247,8 @@ A web app that **only** sells cigarettes and tobacco won't attract enough repeat
                          |  if (client == web_storefront) { serve full catalog }          |
                          +--------------------------------------------------------------+
 ```
+
+</details>
 
 ### 6.2 App Store Regulatory Immunity
 1. **Zero Tobacco on Flutter Apps:** The API Gateway inspects `X-Software-Id` / `User-Agent` headers. Requests from the Flutter Customer App (`is_app_store_client: true`) automatically exclude all items in tobacco/smoking categories and all stores with `store_type = 'paan_corner'`. This provides 100% immunity from Google Play and Apple App Store bans.

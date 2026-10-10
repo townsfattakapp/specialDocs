@@ -20,6 +20,26 @@ In this parallel greenfield architecture:
 
 ## 2. Logical Database Allocations & Table Ownership Matrix
 
+```mermaid
+flowchart TB
+  IAM["iam-service<br/>fattakse_iam • 23 tables"]
+  STORE["store-service<br/>fattakse_store • 16 tables"]
+  CATALOG["catalog-service<br/>fattakse_catalog • 46 tables"]
+  INVENTORY["inventory-service<br/>fattakse_inventory • 12 tables"]
+  ORDER["order-service<br/>fattakse_order • 26 tables"]
+  FLEET["fleet-service<br/>fattakse_fleet • 18 tables"]
+  FINANCE["finance-service<br/>fattakse_finance • 28 tables"]
+  NOTIFY["notify-service<br/>fattakse_notify • 15 tables"]
+  RETIRED["Retired / archived<br/>7 POS tables • parcel/rental pilots • obsolete tables"]
+  classDef active fill:#eff6ff,stroke:#2563eb,color:#172554
+  classDef retired fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+  class IAM,STORE,CATALOG,INVENTORY,ORDER,FLEET,FINANCE,NOTIFY active
+  class RETIRED retired
+```
+
+<details>
+<summary>View the original text-only partition matrix</summary>
+
 ```
 +---------------------------------------------------------------------------------------------------+
 |                                 LOGICAL DATABASE PARTITIONS                                       |
@@ -38,6 +58,8 @@ In this parallel greenfield architecture:
 |  DROPPED / OBSOLETE (70+ Tables): legacy logs, redundant caches, obsolete Laravel session tables    |
 +---------------------------------------------------------------------------------------------------+
 ```
+
+</details>
 
 ### 2.1 Database 1: `fattakse_iam`
 - **Owning Service:** `iam-service`
@@ -103,6 +125,17 @@ The following tables are **permanently excluded** from the new platform:
 
 Because production operates continuously throughout the 5-month development period, we execute a **Three-Stage ETL Migration Strategy**:
 
+```mermaid
+flowchart TB
+  S1["Stage 1 — Months 1–2<br/>Schema mapping and base ETL<br/>Sanitized production snapshots"]
+  S2["Stage 2 — Months 3–4<br/>Staging dress rehearsals<br/>Full migration + delta sync + invariant proofs"]
+  S3["Stage 3 — Month 5 cutover<br/>Pre-sync → 15-minute read-only window → delta sync<br/>Verify 100% match → switch ingress/DNS"]
+  S1 --> S2 --> S3
+```
+
+<details>
+<summary>View the original text-only ETL pipeline</summary>
+
 ```
 +---------------------------------------------------------------------------------------------------+
 |                                THREE-STAGE ETL DATA PIPELINE                                      |
@@ -129,6 +162,8 @@ Because production operates continuously throughout the 5-month development peri
 |  5. Switch Ingress / DNS to the new Microservices API Gateway.                                    |
 +---------------------------------------------------------------------------------------------------+
 ```
+
+</details>
 
 ### 4.1 Automated Financial & Data Invariant Proofs
 Before cutover authorization, the automated reconciliation script verifies:

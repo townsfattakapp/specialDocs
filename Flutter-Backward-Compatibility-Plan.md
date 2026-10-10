@@ -12,6 +12,20 @@
 
 The three Flutter mobile applications are currently published or in release staging on Google Play Store and Apple TestFlight. The mobile apps **cannot be forced to update simultaneously** when the backend transitions to the new microservices platform.
 
+```mermaid
+flowchart TB
+  CUSTOMER["Customer app<br/>v1.0.18+28 • GetX / MVC<br/>/api/v1/*"]
+  VENDOR["Vendor app<br/>v1.0.5+14 • GetX / MVC<br/>/api/v1/vendor/*"]
+  RIDER["Delivery app<br/>v1.0.1+14 • GetX / MVC<br/>/api/v1/delivery-man/*"]
+  GATEWAY["Compatibility API Gateway<br/>Preserves frozen response contracts"]
+  CUSTOMER --> GATEWAY
+  VENDOR --> GATEWAY
+  RIDER --> GATEWAY
+```
+
+<details>
+<summary>View the original text-only app matrix</summary>
+
 ```
 +---------------------------------------+---------------------------------------+---------------------------------------+
 |          CUSTOMER APP                 |             VENDOR APP                |            DELIVERY APP               |
@@ -23,6 +37,8 @@ The three Flutter mobile applications are currently published or in release stag
 | API Contract: /api/v1/*               | API Contract: /api/v1/vendor/*        | API Contract: /api/v1/delivery-man/*  |
 +---------------------------------------+---------------------------------------+---------------------------------------+
 ```
+
+</details>
 
 ---
 

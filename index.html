@@ -18,6 +18,24 @@
     .markdown-section pre>code {
       font-size: 0.85rem;
     }
+    /* Preserve wide legacy tables and diagrams on small screens instead of clipping them. */
+    .markdown-section pre,
+    .markdown-section table,
+    .markdown-section .mermaid {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .markdown-section pre {
+      white-space: pre;
+      -webkit-overflow-scrolling: touch;
+    }
+    .markdown-section .mermaid {
+      padding-bottom: 0.5rem;
+    }
+    .markdown-section .mermaid svg {
+      display: block;
+      height: auto;
+    }
     /* Mobile responsive enhancements */
     @media (max-width: 768px) {
       :root {
